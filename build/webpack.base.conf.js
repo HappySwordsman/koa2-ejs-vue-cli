@@ -27,7 +27,7 @@ const resolve = (dir) => {
 
 // webpack base setting
 module.exports = {
-  name: "ejs",
+  name: "koa2-vue-cli",
   // 入口通过自调用函数会读取/src/js路径下的所有js文件
   entry: {
     ...((filePathList) => {
@@ -108,7 +108,8 @@ module.exports = {
           {
             loader: "file-loader",
             options: {
-              name: "static/img/[name].[ext]?[contenthash]",
+              outputPath: config[isDev ? "dev" : "build"].assetsSubDirectory,
+              name: "img/[name].[ext]?[contenthash]",
               esModule: false,
             },
           },
@@ -121,7 +122,8 @@ module.exports = {
           {
             loader: "file-loader",
             options: {
-              outputPath: "static/font",
+              outputPath: config[isDev ? "dev" : "build"].assetsSubDirectory,
+              name: "font/[name].[ext]?[contenthash]",
             },
           },
         ],
@@ -155,12 +157,18 @@ module.exports = {
                   sourceMap: true,
                 },
               }
-            : MiniCssExtractPlugin.loader,
+            : {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  // "export 'default' (imported as 'mod') was not found
+                  esModule: false,
+                },
+              },
           {
             loader: "css-loader",
             options: {
               // esModule：false 开发环境样式才会生效
-              esModule: false,
+              esModule: true,
               sourceMap: true,
               importLoaders: 1,
             },
@@ -192,10 +200,12 @@ module.exports = {
           viewport:
             "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no",
         },
-        favicon: resolve(`${config.entry}/assets/favicon.ico`),
+        // publicPath: "/server/static",
+        favicon: resolve(`${config.entry}/assets/favicon.png`),
         chunks,
       });
     }),
+
     new CopyWebpackPlugin({
       patterns: [
         {

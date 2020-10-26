@@ -1,26 +1,26 @@
-#!/usr/bin/env node
+/* #!/usr/bin/env node */
 
 /**
  * Module dependencies.
  */
 
-var app = require("../app");
-var debug = require("debug")("demo:server");
-var http = require("http");
-var config = require("../../config");
+const app = require("../app");
+const debug = require("debug")("demo:server");
+const http = require("http");
+const config = require("../../config");
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || config.dev.port);
-// app.set('port', port);
+const port = normalizePort(process.env.PORT || config.dev.port);
+// app.set("port", port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app.callback());
+const server = http.createServer(app.callback());
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -46,7 +46,6 @@ function normalizePort(val) {
     // port number
     return port;
   }
-
   return false;
 }
 
@@ -82,6 +81,6 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  var bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
   debug("Listening on " + bind);
 }

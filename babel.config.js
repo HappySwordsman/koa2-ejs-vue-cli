@@ -4,6 +4,8 @@ const presets = [
     {
       useBuiltIns: "usage", // 垫片使用
       corejs: 2,
+      // esmodules: true,
+      // modules: "auto",
     },
   ],
 ];

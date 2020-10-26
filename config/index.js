@@ -19,7 +19,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: "static",
     assetsPublicPath: "/public/",
-    assetsSuFilebDirectory: "static",
+    // assetsSuFilebDirectory: "static",
     // 代理配置项
     // proxyTable: proxyConfig.proxy,
     host: "0.0.0.0",
@@ -42,10 +42,11 @@ module.exports = {
   // 打包配置项
   build: {
     index: resolve("dist/index.html"),
-    assetsRoot: resolve("dist"),
-    assetsSubDirectory: "static",
+    // 输出目录
+    assetsRoot: resolve("dist/server/public"),
+    assetsSubDirectory: "",
     assetsPublicPath: "/",
-    assetsSuFilebDirectory: "../../static",
+    // assetsSuFilebDirectory: "../../static",
     productionSourceMap: false,
     devtool: "source-map",
 
