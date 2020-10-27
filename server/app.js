@@ -38,20 +38,6 @@ app.use(logger());
 app.use(koaStatic(__dirname + "/public"));
 if (isDev) {
   require("../build/webpack.dev.server")(app);
-} else {
-  // view engine setup
-  /* app.use(
-    views(__dirname + "/views", {
-      extension: "ejs",
-    })
-  ); */
-  // app.use(koaStatic(__dirname + "/static"));
-  /*  app.use(
-    koaMount(
-      `/${config.build.assetsSubDirectory}`,
-      koaStatic(__dirname + "/static")
-    )
-  ); */
 }
 // logger
 app.use(async (ctx, next) => {

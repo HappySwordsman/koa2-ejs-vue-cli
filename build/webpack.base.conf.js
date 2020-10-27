@@ -50,11 +50,11 @@ module.exports = {
     path: config.build.assetsRoot, // 默认 dist
     publicPath: config[isDev ? "dev" : "build"].assetsPublicPath, // 默认 /
     filename: path.posix.join(
-      config.build.assetsSubDirectory,
+      config[isDev ? "dev" : "build"].assetsSubDirectory,
       "js/[name].[hash:5].js"
     ),
     chunkFilename: path.posix.join(
-      config.build.assetsSubDirectory,
+      config[isDev ? "dev" : "build"].assetsSubDirectory,
       "js/[id].[chunkhash].js"
     ),
   },
@@ -168,7 +168,7 @@ module.exports = {
             loader: "css-loader",
             options: {
               // esModule：false 开发环境样式才会生效
-              esModule: true,
+              esModule: false,
               sourceMap: true,
               importLoaders: 1,
             },
@@ -210,7 +210,7 @@ module.exports = {
       patterns: [
         {
           from: resolve("static"),
-          to: config.build.assetsSubDirectory,
+          to: config[isDev ? "dev" : "build"].assetsSubDirectory,
           globOptions: {
             ignore: [".*"],
           },
