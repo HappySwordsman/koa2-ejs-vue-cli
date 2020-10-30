@@ -1,6 +1,6 @@
 const del = require("del");
 const clean = (cb) => {
-  del(["dist/**/*", "!dist/favicon.ico"]);
+  del.sync(["dist/**"]);
   cb();
 };
 module.exports = clean;
