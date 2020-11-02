@@ -1,9 +1,10 @@
-<a href="" style="display: block; width: 100%; text-align: center;">
-  <img width="200" src="./static/images/vue-logo.png" />
-</a>
+<p align="center">
+  <a href="" target="_blank">
+    <img width="200" src="./static/images/vue-logo.png" />
+  </a>
+</p>
 
 # koa2 vue-cli
-
 [![Build Status](./static/images/passing.svg)](https://github.com/tnnevol/koa2-ejs-vue-cli)
 
 ## 描述
