@@ -25,21 +25,53 @@ const resolve = (dir) => {
   return path.join(__dirname, "..", dir);
 };
 
+// 多入口文件的处理
+function entryProcess(entryPath) {
+  // /home/tnnevol/workspace/gits/koa2-learn/client/entry/front/index.js
+  const prefixPath = resolve(`${config.entry}/${entryPath}`);
+  const filePathList = glob.sync(`${prefixPath}**/*.js`);
+  const entry = {};
+  filePathList.forEach((_path) => {
+    const remainPath = _path.replace(prefixPath, "");
+    const ext = path.parse(_path).ext;
+    const reName = remainPath.replace(ext, "").split(pathREG).join(".");
+    entry[reName] = isDev
+      ? ["webpack-hot-middleware/client?reload=true", _path]
+      : _path;
+  });
+  return entry;
+}
+
+// 多模板容器的处理
+function viewContainerProcess(viewsEntry) {
+  const prefixPath = resolve(`${config.serverEntry}/${viewsEntry}`);
+  const pathViews = glob.sync(`${prefixPath}**/*.ejs`);
+  return pathViews.map((view) => {
+    const ext = path.parse(view).ext;
+    const remainPath = view.replace(prefixPath, "");
+    const reName = remainPath.replace(ext, "").split(pathREG).join(".");
+    const chunks = isDev ? [reName] : ["manifest", "vendors", reName];
+    return new HtmlWebpackPlugin({
+      template: view,
+      filename: `${viewsEntry}${remainPath}`, // resolve(),
+      hash: true, // 为了更好的 cache，可以在文件名后加个 hash。
+      cache: false,
+      meta: {
+        viewport:
+          "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no",
+      },
+      favicon: resolve(`${config.entry}/assets/favicon.png`),
+      chunks,
+    });
+  });
+}
+
 // webpack base setting
 module.exports = {
   name: "koa2-vue-cli",
   // 入口通过自调用函数会读取/src/js路径下的所有js文件
   entry: {
-    ...((filePathList) => {
-      const entry = {};
-      filePathList.forEach((_path) => {
-        const fileName = path.parse(_path).name;
-        entry[fileName] = isDev
-          ? ["webpack-hot-middleware/client?reload=true", _path]
-          : _path;
-      });
-      return entry;
-    })(glob.sync(resolve(`${config.entry}/entry/*.js`))),
+    ...entryProcess("entry/"),
   },
   // 用于cdn的全局变量
   // externals: {
@@ -184,27 +216,7 @@ module.exports = {
     new webpack.ProvidePlugin({}),
 
     // html 输出
-    ...glob.sync(resolve(`${config.serverEntry}/views/*.ejs`)).map((_path) => {
-      const splitPath = _path.split(pathREG);
-      // ejs ---> html文件 输出路径
-      const fileName = `${splitPath.slice(-2)[0]}/${path.parse(_path).name}`;
-      const chunkName = path.parse(_path).name;
-
-      const chunks = isDev ? [chunkName] : ["manifest", "vendors", chunkName];
-      return new HtmlWebpackPlugin({
-        template: _path,
-        filename: `${fileName}.ejs`, // resolve(),
-        hash: true, // 为了更好的 cache，可以在文件名后加个 hash。
-        cache: false,
-        meta: {
-          viewport:
-            "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no",
-        },
-        // publicPath: "/server/static",
-        favicon: resolve(`${config.entry}/assets/favicon.png`),
-        chunks,
-      });
-    }),
+    ...viewContainerProcess("views/"),
 
     new CopyWebpackPlugin({
       patterns: [

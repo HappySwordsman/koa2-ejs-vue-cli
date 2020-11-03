@@ -1,6 +1,7 @@
 <p align="center">
   <a href="" target="_blank">
-    <img width="100" src="./static/images/vue-logo.png" />
+    <img height="100" src="./static/images/vue-logo.png" />&emsp;&emsp;
+    <img height=100 src="./static/images/koa-logo.png" />
   </a>
 </p>
 
@@ -14,18 +15,10 @@
 ```text
 ├── build // webpack处理
 ├── config // webpack基础配置
-├── dist // 上线目录
-│   └── server
-│       └── public
-│           ├── css
-│           ├── img
-│           ├── js
-│           ├── stylesheets
-│           └── views
 ├── gulpfile.babel.js
 ├── server // 服务层
 │   ├── bin
-│   ├── middleware
+│   ├── middleware // server服务层的中间件
 │   ├── model
 │   ├── public
 │   │   ├── images
@@ -37,7 +30,7 @@
 │   └── views // vue的页面容器
 ├── static // 静态资源文件目录
 │   └── images
-└── vue-cli // 原cli的src目录
+└── client // 原cli的src目录
     ├── assets
     │   └── images
     ├── components
@@ -47,7 +40,13 @@
     └── views
 ```
 * /server 目录是服务端开发接口和提供vue的页面容器
-* /vue-cli 就是vue-cli之前的src目录
+* /client 就是vue-cli之前的src目录
 
 ## 更新说明
-* 2020/11/02: 已完成脚手架的基础搭建和文档说明
+* 2020/11/02: 完成脚手架的基础搭建和文档说明
+* 2020/11/03: 完成前后台的分级架构
+
+## 待完成
+* 中间件的规范化
+* 集成element-admin
+* 实现ejs 渲染中间件

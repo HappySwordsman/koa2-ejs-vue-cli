@@ -4,7 +4,7 @@
  * 项目打包 webpack-prod-build
  */
 
-const { series, parallel } = require("gulp");
+const { series } = require("gulp");
 const clear = require("./clear");
 const buildVue = require("./build.vue");
 const buildServer = require("./build.server");
