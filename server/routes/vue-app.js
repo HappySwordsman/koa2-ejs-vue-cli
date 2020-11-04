@@ -1,11 +1,12 @@
-const router = require("koa-router")();
+function vueApp(router) {
+  router.prefix("/vue-app");
 
-router.prefix("/vue-app");
-
-router.get("/*", async (ctx) => {
-  await ctx.render("front/index.ejs", {
-    title: "hello koa vue!",
+  router.get("/*", async (ctx) => {
+    await ctx.render("front/index.ejs", {
+      title: "hello koa vue!",
+    });
   });
-});
+  return router;
+}
 
-module.exports = router;
+module.exports = vueApp;

@@ -1,17 +1,13 @@
-const router = require("koa-router")();
+const router = require("koa-router");
 
-router.get("/", async (ctx) => {
-  ctx.body = "koa2 index";
-});
-/* 
-router.get("/string", async (ctx, next) => {
-  ctx.body = "koa2 string";
-});
+const routes = {
+  users: require("./users")(router()),
+  vueApp: require("./vue-app")(router()),
+};
 
-router.get("/json", async (ctx, next) => {
-  ctx.body = {
-    title: "koa2 json",
-  };
-}); */
-
-module.exports = router;
+function registerRouter(app) {
+  for (let route of Object.values(routes)) {
+    app.use(route.routes(), route.allowedMethods());
+  }
+}
+module.exports = registerRouter;

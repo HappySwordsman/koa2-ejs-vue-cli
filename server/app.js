@@ -15,9 +15,7 @@ const proxyOptions = require("../config/proxy.config");
 // 当前项目环境
 const isDev = process.env.NODE_ENV === "development";
 
-const index = require("./routes/index");
-const users = require("./routes/users");
-const vueApp = require("./routes/vue-app");
+const routes = require("./routes");
 
 app.use(cors());
 
@@ -48,10 +46,8 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
 
-// routes
-app.use(index.routes(), index.allowedMethods());
-app.use(users.routes(), users.allowedMethods());
-app.use(vueApp.routes(), vueApp.allowedMethods());
+// registerRouter
+routes(app);
 
 // error-handling
 app.on("error", (err, ctx) => {
