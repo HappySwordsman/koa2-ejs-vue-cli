@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "npm run dev",
-    "dev": "cross-env NODE_ENV=development ./node_modules/.bin/nodemon server/bin/www",
+    "start:api": "cross-env NODE_ENV=development API_TEST=testing ./node_modules/.bin/nodemon server/bin/www",
+    "dev": "cross-env NODE_ENV=development API_TEST=notest ./node_modules/.bin/nodemon server/bin/www",
     "gulp:build": "cross-env NODE_ENV=production gulp build",
     "prd": "pm2 start server/bin/www",
     "eslintfix": "eslint --fix --ext .js --ext .vue client/",

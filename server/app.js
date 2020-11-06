@@ -14,6 +14,9 @@ const proxyOptions = require("../config/proxy.config");
 
 // 当前项目环境
 const isDev = process.env.NODE_ENV === "development";
+const isApiTest = process.env.API_TEST === "testing";
+
+console.log(`api: ${process.env.API_TEST}`);
 
 const routes = require("./routes");
 
@@ -34,7 +37,7 @@ app.use(json());
 app.use(logger());
 
 app.use(koaStatic(__dirname + "/public"));
-if (isDev) {
+if (isDev && !isApiTest) {
   require("./utils/koa-dev-webpack")(app);
 }
 app.use(views("views"));
