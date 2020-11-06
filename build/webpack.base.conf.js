@@ -12,7 +12,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
-const StyleLintPlugin = require("stylelint-webpack-plugin");
+// const StyleLintPlugin = require("stylelint-webpack-plugin");
 
 // config variable(全局变量)
 const config = require("../config");
@@ -148,8 +148,21 @@ module.exports = {
         ],
       },
       {
+        test: /\.svg$/,
+        include: [resolve(`${config.entry}/icons`)],
+        use: [
+          {
+            loader: "svg-sprite-loader",
+            options: {
+              symbolId: "icon-[name]",
+            },
+          },
+        ],
+      },
+      {
         // font
         test: /\.(eot|woff2|woff|ttf|svg)$/,
+        exclude: [resolve(`${config.entry}/icons`)],
         use: [
           {
             loader: "file-loader",
@@ -159,6 +172,15 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        test: /\.xml$/,
+        use: {
+          loader: "xml-loader",
+          options: {
+            explicitArray: false,
+          },
+        },
       },
       {
         // ejs
@@ -209,6 +231,36 @@ module.exports = {
           "less-loader",
         ],
       },
+      {
+        test: /\.(sc|sa)ss$/,
+        use: [
+          isDev
+            ? {
+                loader: "vue-style-loader",
+                options: {
+                  sourceMap: true,
+                },
+              }
+            : {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  // "export 'default' (imported as 'mod') was not found
+                  esModule: false,
+                },
+              },
+          {
+            loader: "css-loader",
+            options: {
+              // esModule：false 开发环境样式才会生效
+              esModule: false,
+              sourceMap: true,
+              importLoaders: 1,
+            },
+          },
+          "postcss-loader",
+          "sass-loader",
+        ],
+      },
     ],
   },
   plugins: [
@@ -237,8 +289,8 @@ module.exports = {
       filename: utils.assetsPath("css/[name].css"), // devMode ? '[name].css' : '[name].[hash].css',
       chunkFilename: utils.assetsPath("css/[id].css"), // devMode ? '[id].css' : '[id].[hash].css'
     }),
-    new StyleLintPlugin({
-      files: ["**/*.{vue,htm,html,css,sss,less,scss,sass}"],
-    }),
+    // new StyleLintPlugin({
+    //   files: ["**/*.{vue,htm,html,css,sss,less,scss,sass}"],
+    // }),
   ],
 };
