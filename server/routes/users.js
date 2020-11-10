@@ -30,7 +30,7 @@ function users(router) {
    * @apiParam {Number} password 用户密码
    *
    * @apiSuccess {Object} info
-   * @apiSuccess {String} info.accountToken 用户token
+   * @apiUse userInfo
    *
    * @apiSuccessExample Success-Response:
    *     HTTP/1.1 200 OK

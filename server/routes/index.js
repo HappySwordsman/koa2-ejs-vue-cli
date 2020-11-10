@@ -23,7 +23,7 @@ glob.sync(`${__dirname}/**/!(index).js`).forEach((file) => {
     .replace(relativePathParse.ext, "")
     .replace(".", "-");
   const router = new Router();
-  /* jwt 验证 */
+  /* jwt 验证 一定要在路由返回前使用 */
   router.use(
     tokenVerifyMiddleware({
       whiteList: ["/api/mock", "/api/books", "/api/users/login", "/api/wechat"],

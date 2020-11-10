@@ -14,8 +14,8 @@ mongoose.set("useFindAndModify", false);
 module.exports = async () => {
   await new Promise((resolve, reject) => {
     mongoose.connect(uri, {
-      pass: "newblue1234",
-      user: "tnnevol",
+      pass: "123456",
+      user: "test",
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

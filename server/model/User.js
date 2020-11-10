@@ -1,6 +1,16 @@
 /**
  * @apiDefine userInfo
- * @apiSuccess
+ * @apiSuccess {Number} id
+ * @apiSuccess {String} name 用户名
+ * @apiSuccess {String} password 密码
+ * @apiSuccess {Number} createTime
+ * @apiSuccess {String} email 邮箱
+ * @apiSuccess {String} headPic 头像
+ * @apiSuccess {String} nickName 昵称
+ * @apiSuccess {String} personalPrefile 个人简介
+ * @apiSuccess {Number} loginStatus 登录状态 0-未登录 1-登录
+ * @apiSuccess {String} accountToken token
+ *
  */
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;

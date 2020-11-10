@@ -75,6 +75,7 @@ app.use(koaResponse());
 // registerRouter
 routes(app);
 
+// 404 处理
 app.use(async function (ctx, next) {
   /* 404 */
   ctx.body = {
