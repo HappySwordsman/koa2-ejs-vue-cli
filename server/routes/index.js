@@ -1,6 +1,7 @@
 const glob = require("glob");
 const path = require("path");
-const router = require("koa-router");
+const tokenVerifyMiddleware = require("../middleware/token-verify-middleware");
+const Router = require("koa-router");
 
 const routes = {
   /*  users: require("./users")(router()),
@@ -21,13 +22,19 @@ glob.sync(`${__dirname}/**/!(index).js`).forEach((file) => {
   const keyName = relativePath
     .replace(relativePathParse.ext, "")
     .replace(".", "-");
-  // console.log(toStrSmallHump(keyName));
-  routes[toStrSmallHump(keyName)] = require(file)(router());
+  const router = new Router();
+  /* jwt 验证 */
+  router.use(
+    tokenVerifyMiddleware({
+      whiteList: ["/api/mock", "/api/books", "/api/users/login", "/api/wechat"],
+    })
+  );
+  routes[toStrSmallHump(keyName)] = require(file)(router);
 });
 
 function registerRouter(app) {
-  for (let route of Object.values(routes)) {
-    app.use(route.routes(), route.allowedMethods());
+  for (let router of Object.values(routes)) {
+    app.use(router.routes(), router.allowedMethods());
   }
 }
 module.exports = registerRouter;

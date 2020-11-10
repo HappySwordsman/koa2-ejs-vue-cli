@@ -60,7 +60,7 @@ function viewContainerProcess(viewsEntry) {
         viewport:
           "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no",
       },
-      favicon: resolve(`${config.entry}/assets/favicon.png`),
+      favicon: resolve(`${config.entry}/assets/favicon.ico`),
       chunks,
     });
   });

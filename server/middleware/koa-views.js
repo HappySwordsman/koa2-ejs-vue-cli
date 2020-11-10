@@ -8,7 +8,7 @@ const isDev = process.env.NODE_ENV === "development";
 ejs.delimiter = "?";
 
 function viewsMiddleware(path, options = {}) {
-  return function views(ctx, next) {
+  return async function views(ctx, next) {
     let extendsContext = false;
 
     function render(relPath, locals = {}) {
@@ -42,11 +42,11 @@ function viewsMiddleware(path, options = {}) {
       return render;
     }
 
-    if (ctx.render) return next();
+    if (ctx.render) await next();
 
     ctx.response.render = ctx.render = render;
 
-    return next();
+    await next();
   };
 }
 module.exports = viewsMiddleware;

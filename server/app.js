@@ -8,6 +8,12 @@ const logger = require("koa-logger");
 const proxy = require("./middleware/koa-http-proxy-middleware");
 const cors = require("koa2-cors");
 const koaStatic = require("koa-static");
+const koaResponse = require("./middleware/koa-response-middleware");
+// 连接数据库
+const mongoDB = require("./model");
+
+const routes = require("./routes");
+
 // const koaMount = require("koa-mount");
 // const config = require("../config/index");
 const proxyOptions = require("../config/proxy.config");
@@ -18,10 +24,25 @@ const isApiTest = process.env.API_TEST === "testing";
 
 console.log(`api: ${process.env.API_TEST}`);
 
-const routes = require("./routes");
+// start mongoDB
+try {
+  mongoDB();
+} catch (err) {
+  console.log("mongoDB连接失败！！！");
+  console.log(err);
+}
+// 计算接口时间
+app.use(async (ctx, next) => {
+  const start = new Date();
+  await next();
+  const ms = new Date() - start;
+  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
+});
 
+// 跨域中间件
 app.use(cors());
 
+// 代理中间件
 app.use(proxy(proxyOptions));
 
 // error handler
@@ -33,24 +54,34 @@ app.use(
     enableTypes: ["json", "form", "text", "xml"],
   })
 );
+
 app.use(json());
+
+// logger
 app.use(logger());
 
+// 静态地址解析
 app.use(koaStatic(__dirname + "/public"));
+// 开发模式 && 非接口模式
 if (isDev && !isApiTest) {
   require("./utils/koa-dev-webpack")(app);
 }
+// 静态页中间件
 app.use(views("views"));
-// logger
-app.use(async (ctx, next) => {
-  const start = new Date();
-  await next();
-  const ms = new Date() - start;
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
-});
+
+// 响应拦截器
+app.use(koaResponse());
 
 // registerRouter
 routes(app);
+
+app.use(async function (ctx, next) {
+  /* 404 */
+  ctx.body = {
+    type: "nonexistenceApi",
+  };
+  await next();
+});
 
 // error-handling
 app.on("error", (err, ctx) => {
