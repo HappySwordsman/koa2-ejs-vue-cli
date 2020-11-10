@@ -1,0 +1,16 @@
+{
+  "name": "book-api",
+  "version": "1.1.0",
+  "description": "用于图书管理系统",
+  "title": "图书管理系统",
+  "url": "http://127.0.0.1:9001",
+  "sampleUrl": "http://127.0.0.1:9001",
+  "header": {
+    "title": "介绍",
+    "filename": "header.md"
+  },
+  "footer": {
+    "title": "感谢",
+    "filename": "footer.md"
+  }
+}

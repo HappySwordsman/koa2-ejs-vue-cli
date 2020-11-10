@@ -12,7 +12,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
-const StyleLintPlugin = require("stylelint-webpack-plugin");
+// const StyleLintPlugin = require("stylelint-webpack-plugin");
 
 // config variable(全局变量)
 const config = require("../config");
@@ -25,21 +25,53 @@ const resolve = (dir) => {
   return path.join(__dirname, "..", dir);
 };
 
+// 多入口文件的处理
+function entryProcess(entryPath) {
+  // /home/tnnevol/workspace/gits/koa2-learn/client/entry/front/index.js
+  const prefixPath = resolve(`${config.entry}/${entryPath}`);
+  const filePathList = glob.sync(`${prefixPath}**/*.js`);
+  const entry = {};
+  filePathList.forEach((_path) => {
+    const remainPath = _path.replace(prefixPath, "");
+    const ext = path.parse(_path).ext;
+    const reName = remainPath.replace(ext, "").split(pathREG).join(".");
+    entry[reName] = isDev
+      ? ["webpack-hot-middleware/client?reload=true", _path]
+      : _path;
+  });
+  return entry;
+}
+
+// 多模板容器的处理
+function viewContainerProcess(viewsEntry) {
+  const prefixPath = resolve(`${config.serverEntry}/${viewsEntry}`);
+  const pathViews = glob.sync(`${prefixPath}**/*.ejs`);
+  return pathViews.map((view) => {
+    const ext = path.parse(view).ext;
+    const remainPath = view.replace(prefixPath, "");
+    const reName = remainPath.replace(ext, "").split(pathREG).join(".");
+    const chunks = isDev ? [reName] : ["manifest", "vendors", reName];
+    return new HtmlWebpackPlugin({
+      template: view,
+      filename: `${viewsEntry}${remainPath}`, // resolve(),
+      hash: true, // 为了更好的 cache，可以在文件名后加个 hash。
+      cache: false,
+      meta: {
+        viewport:
+          "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no",
+      },
+      favicon: resolve(`${config.entry}/assets/favicon.ico`),
+      chunks,
+    });
+  });
+}
+
 // webpack base setting
 module.exports = {
   name: "koa2-vue-cli",
   // 入口通过自调用函数会读取/src/js路径下的所有js文件
   entry: {
-    ...((filePathList) => {
-      const entry = {};
-      filePathList.forEach((_path) => {
-        const fileName = path.parse(_path).name;
-        entry[fileName] = isDev
-          ? ["webpack-hot-middleware/client?reload=true", _path]
-          : _path;
-      });
-      return entry;
-    })(glob.sync(resolve(`${config.entry}/entry/*.js`))),
+    ...entryProcess("entry/"),
   },
   // 用于cdn的全局变量
   // externals: {
@@ -116,8 +148,21 @@ module.exports = {
         ],
       },
       {
+        test: /\.svg$/,
+        include: [resolve(`${config.entry}/icons`)],
+        use: [
+          {
+            loader: "svg-sprite-loader",
+            options: {
+              symbolId: "icon-[name]",
+            },
+          },
+        ],
+      },
+      {
         // font
         test: /\.(eot|woff2|woff|ttf|svg)$/,
+        exclude: [resolve(`${config.entry}/icons`)],
         use: [
           {
             loader: "file-loader",
@@ -127,6 +172,15 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        test: /\.xml$/,
+        use: {
+          loader: "xml-loader",
+          options: {
+            explicitArray: false,
+          },
+        },
       },
       {
         // ejs
@@ -177,6 +231,36 @@ module.exports = {
           "less-loader",
         ],
       },
+      {
+        test: /\.(sc|sa)ss$/,
+        use: [
+          isDev
+            ? {
+                loader: "vue-style-loader",
+                options: {
+                  sourceMap: true,
+                },
+              }
+            : {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  // "export 'default' (imported as 'mod') was not found
+                  esModule: false,
+                },
+              },
+          {
+            loader: "css-loader",
+            options: {
+              // esModule：false 开发环境样式才会生效
+              esModule: false,
+              sourceMap: true,
+              importLoaders: 1,
+            },
+          },
+          "postcss-loader",
+          "sass-loader",
+        ],
+      },
     ],
   },
   plugins: [
@@ -184,27 +268,7 @@ module.exports = {
     new webpack.ProvidePlugin({}),
 
     // html 输出
-    ...glob.sync(resolve(`${config.serverEntry}/views/*.ejs`)).map((_path) => {
-      const splitPath = _path.split(pathREG);
-      // ejs ---> html文件 输出路径
-      const fileName = `${splitPath.slice(-2)[0]}/${path.parse(_path).name}`;
-      const chunkName = path.parse(_path).name;
-
-      const chunks = isDev ? [chunkName] : ["manifest", "vendors", chunkName];
-      return new HtmlWebpackPlugin({
-        template: _path,
-        filename: `${fileName}.ejs`, // resolve(),
-        hash: true, // 为了更好的 cache，可以在文件名后加个 hash。
-        cache: false,
-        meta: {
-          viewport:
-            "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no",
-        },
-        // publicPath: "/server/static",
-        favicon: resolve(`${config.entry}/assets/favicon.png`),
-        chunks,
-      });
-    }),
+    ...viewContainerProcess("views/"),
 
     new CopyWebpackPlugin({
       patterns: [
@@ -225,8 +289,8 @@ module.exports = {
       filename: utils.assetsPath("css/[name].css"), // devMode ? '[name].css' : '[name].[hash].css',
       chunkFilename: utils.assetsPath("css/[id].css"), // devMode ? '[id].css' : '[id].[hash].css'
     }),
-    new StyleLintPlugin({
-      files: ["**/*.{vue,htm,html,css,sss,less,scss,sass}"],
-    }),
+    // new StyleLintPlugin({
+    //   files: ["**/*.{vue,htm,html,css,sss,less,scss,sass}"],
+    // }),
   ],
 };

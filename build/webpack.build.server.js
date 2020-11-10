@@ -18,6 +18,7 @@ module.exports = {
   output: {
     path: resolve("dist"),
     filename: "server/www.js",
+    libraryTarget: "commonjs2",
   },
   optimization: {
     minimize: true,
@@ -45,7 +46,9 @@ module.exports = {
   resolve: {
     extensions: [".js"],
   },
-  externals: [nodeExternals()],
+  externals: nodeExternals({
+    allowlist: /\.css$/,
+  }),
   // devtool: "sourcemap",
   module: {
     rules: [

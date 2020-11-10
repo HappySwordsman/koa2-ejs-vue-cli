@@ -12,7 +12,7 @@ module.exports = {
   // 文件后缀名
   ext: "ejs",
   // 入口
-  entry: "vue-cli",
+  entry: "client",
   serverEntry: "server",
   // 服务配置项
   dev: {
