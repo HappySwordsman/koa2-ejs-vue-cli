@@ -1,6 +1,6 @@
 {
   "name": "koa2-vue-cli-template",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "gulp:start": "gulp start",
