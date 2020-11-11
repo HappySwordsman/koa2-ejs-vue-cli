@@ -23,13 +23,13 @@ function users(router) {
    * @apiSampleRequest /api/users/login
    * @apiName login
    * @apiDescription 用于登录和创建用户-登录
-   * @apiVersion 0.0.1
+   * @apiVersion 1.0.0
    * @apiGroup Users
    *
    * @apiParam {Number} username 用户名称
    * @apiParam {Number} password 用户密码
    *
-   * @apiSuccess {Object} info
+   * @apiSuccess {Object} data
    * @apiUse userInfo
    *
    * @apiSuccessExample Success-Response:
@@ -46,15 +46,17 @@ function users(router) {
   });
 
   /**
-   * @api {post} /api/users/info info.
+   * @api {get} /api/users/info info.
    * @apiSampleRequest /api/users/info
    * @apiName info
    * @apiDescription 用于获取用户信息
-   * @apiVersion 0.0.1
+   * @apiVersion 1.0.0
    * @apiGroup Users
    *
+   * @apiHeader {String} accountToken
+   *
    * @apiSuccess {Object} data
-   * @apiSuccess {String} data.name
+   * @apiUse userInfo
    *
    * @apiSuccessExample Success-Response:
    *     HTTP/1.1 200 OK
@@ -91,10 +93,10 @@ function users(router) {
     // console.log(userInfo);
     if (userInfo) {
       // 用户存在 验证用过返回token
-      const _password = decryptCbc(userInfo.password);
-      if (_password === password) {
+      const _password = encryptCbc(password);
+      if (_password === userInfo.password) {
         // 通过用户的 _id(该标识具有唯一性) 生成 token
-        console.log(userInfo._id);
+        // console.log(userInfo._id);
         const jwt = new JwtUtil(userInfo._id);
         const token = jwt.generateToken();
         await updateOne(

@@ -53,7 +53,7 @@ const modelCount = async (model, type, field) => {
  * 实现自增
  * @param Model
  * @param sequenceName
- * @returns {number}
+ * @returns {Number}
  */
 const getNextSequenceValue = async (Model, sequenceName) => {
   const query = {
