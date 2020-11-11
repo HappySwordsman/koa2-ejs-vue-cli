@@ -4,10 +4,18 @@
  * 项目打包 webpack-prod-build
  */
 
-const { series } = require("gulp");
+const { series, parallel } = require("gulp");
 const clear = require("./clear");
 const buildVue = require("./build.vue");
 const buildServer = require("./build.server");
 const processPack = require("./process.package");
+const generateApidoc = require("./generate.apidoc");
 
-exports.build = series(clear, buildVue, buildServer, processPack);
+exports.build = series(
+  parallel(clear, generateApidoc),
+  buildVue,
+  buildServer,
+  processPack
+);
+
+exports.apidoc = series(generateApidoc);

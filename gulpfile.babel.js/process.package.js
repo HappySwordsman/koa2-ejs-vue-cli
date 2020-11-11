@@ -7,7 +7,11 @@ const processPackage = (cb) => {
     "prd": "cross-env NODE_ENV=production node ./server/www",
     "pm2:prd": "cross-env NODE_ENV=production pm2 start www"
   },
-  "dependencies": ${JSON.stringify(require("../package").dependencies)}
+  "dependencies": ${JSON.stringify(
+    require("../package").dependencies,
+    undefined,
+    "\t"
+  )}
   }`;
 
   fs.outputFile("./dist/package.json", jsonStr, (err) => {

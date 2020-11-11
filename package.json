@@ -7,7 +7,8 @@
     "start:api": "cross-env NODE_ENV=development API_TEST=testing ./node_modules/.bin/nodemon server/bin/www",
     "dev": "cross-env NODE_ENV=development API_TEST=notest ./node_modules/.bin/nodemon server/bin/www",
     "gulp:build": "cross-env NODE_ENV=production gulp build",
-    "prd": "pm2 start server/bin/www",
+    "gulp:apidoc": "gulp apidoc",
+    "prd": "cross-env NODE_ENV=production pm2 start server/bin/www",
     "eslintfix": "eslint --fix --ext .js --ext .vue client/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
