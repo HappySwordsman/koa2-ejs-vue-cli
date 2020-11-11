@@ -1,6 +1,7 @@
 const glob = require("glob");
 const path = require("path");
 const tokenVerifyMiddleware = require("../middleware/token-verify-middleware");
+const koaResponse = require("../middleware/koa-response-middleware");
 const Router = require("koa-router");
 
 const routes = {
@@ -26,13 +27,26 @@ glob.sync(`${__dirname}/**/!(index).js`).forEach((file) => {
   /* jwt 验证 一定要在路由返回前使用 */
   router.use(
     tokenVerifyMiddleware({
-      whiteList: ["/api/mock", "/api/books", "/api/users/login", "/api/wechat"],
+      whiteList: [
+        "/vue-admin",
+        "/vue-app",
+        "/api/mock",
+        "/api/books",
+        "/api/users/login",
+        "/api/wechat",
+      ],
     })
   );
   routes[toStrSmallHump(keyName)] = require(file)(router);
 });
 
 function registerRouter(app) {
+  // 响应拦截器
+  app.use(
+    koaResponse({
+      ignore: ["/api/mock", "/vue-admin", "/vue-app"],
+    })
+  );
   for (let router of Object.values(routes)) {
     app.use(router.routes(), router.allowedMethods());
   }
