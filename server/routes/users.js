@@ -2,7 +2,7 @@ function users(router) {
   const User = require("../model/User");
   const { getNextSequenceValue, updateOne } = require("../utils/model-tools");
   const JwtUtil = require("../utils/Jwt");
-  const { encryptCbc, decryptCbc } = require("../utils/cryptoPackage");
+  const { encryptCbc } = require("../utils/cryptoPackage");
 
   router.prefix("/api/users");
 

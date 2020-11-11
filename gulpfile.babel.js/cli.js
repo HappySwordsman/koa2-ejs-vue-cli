@@ -1,3 +1,4 @@
+// https://github.com/nondanee/UnblockNeteaseMusic.git 多谢
 const cli = {
   width: 80,
   _program: {},

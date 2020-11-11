@@ -58,6 +58,10 @@ jwt采用的是[jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)不要�
 ## user的密码
 对于用户的密码存储应当使用不可逆的加密，不要像笔者一样解密库中的密码进行对比，在源码中这样的操作非常危险，请谨慎！！！
 
+## gulp
+* 纯属娱乐
+* [cli.js](https://github.com/nondanee/UnblockNeteaseMusic.git)，稍微修改就可以放进gulp中，冗余功能并无去除，也没时间去除。
+
 ## 更新说明
 * 2020/11/02: 完成脚手架的基础搭建和文档说明
 * 2020/11/03: 完成前后台的分级架构, 实现ejs的渲染中间件
