@@ -26,7 +26,14 @@ glob.sync(`${__dirname}/**/!(index).js`).forEach((file) => {
   /* jwt 验证 一定要在路由返回前使用 */
   router.use(
     tokenVerifyMiddleware({
-      whiteList: ["/api/mock", "/api/books", "/api/users/login", "/api/wechat"],
+      whiteList: [
+        "/vue-admin",
+        "/vue-app",
+        "/api/mock",
+        "/api/books",
+        "/api/users/login",
+        "/api/wechat",
+      ],
     })
   );
   routes[toStrSmallHump(keyName)] = require(file)(router);

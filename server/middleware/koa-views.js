@@ -23,7 +23,6 @@ function viewsMiddleware(path, options = {}) {
           }${path}/${relPath}`
         )
         .then((res) => {
-          // console.log(res);
           return res.data;
         })
         .then((template) => {

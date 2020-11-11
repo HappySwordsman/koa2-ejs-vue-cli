@@ -70,7 +70,11 @@ if (isDev && !isApiTest) {
 app.use(views("views"));
 
 // 响应拦截器
-app.use(koaResponse());
+app.use(
+  koaResponse({
+    ignore: ["/api/mock", "/vue-admin", "/vue-app"],
+  })
+);
 
 // registerRouter
 routes(app);
