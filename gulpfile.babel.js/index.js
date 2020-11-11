@@ -10,6 +10,9 @@ const buildVue = require("./build.vue");
 const buildServer = require("./build.server");
 const processPack = require("./process.package");
 const generateApidoc = require("./generate.apidoc");
+const start = require("./start");
+
+exports.start = series(start);
 
 exports.build = series(
   parallel(clear, generateApidoc),
