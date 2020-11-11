@@ -8,7 +8,6 @@ const logger = require("koa-logger");
 const proxy = require("./middleware/koa-http-proxy-middleware");
 const cors = require("koa2-cors");
 const koaStatic = require("koa-static");
-const koaResponse = require("./middleware/koa-response-middleware");
 // 连接数据库
 const mongoDB = require("./model");
 
@@ -68,13 +67,6 @@ if (isDev && !isApiTest) {
 }
 // 静态页中间件
 app.use(views("views"));
-
-// 响应拦截器
-app.use(
-  koaResponse({
-    ignore: ["/api/mock", "/vue-admin", "/vue-app"],
-  })
-);
 
 // registerRouter
 routes(app);

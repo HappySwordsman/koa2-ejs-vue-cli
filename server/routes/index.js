@@ -1,6 +1,7 @@
 const glob = require("glob");
 const path = require("path");
 const tokenVerifyMiddleware = require("../middleware/token-verify-middleware");
+const koaResponse = require("../middleware/koa-response-middleware");
 const Router = require("koa-router");
 
 const routes = {
@@ -40,6 +41,12 @@ glob.sync(`${__dirname}/**/!(index).js`).forEach((file) => {
 });
 
 function registerRouter(app) {
+  // 响应拦截器
+  app.use(
+    koaResponse({
+      ignore: ["/api/mock", "/vue-admin", "/vue-app"],
+    })
+  );
   for (let router of Object.values(routes)) {
     app.use(router.routes(), router.allowedMethods());
   }
