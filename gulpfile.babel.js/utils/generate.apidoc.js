@@ -1,11 +1,12 @@
 // const path = require('path');
-const fs = require("fs-extra");
-// node 进程执行程序
-const { exec } = require("child_process");
-const apidoc = require("../apidoc.json");
-const packageConf = require("../package.json");
-const config = require("../config");
-const generateApidoc = (cb) => {
+const generateApidoc = () => {
+  const fs = require("fs-extra");
+  // node 进程执行程序
+  const { exec } = require("child_process");
+  const apidoc = require("../../apidoc.json");
+  const packageConf = require("../../package.json");
+  const config = require("../../config");
+
   // 执行shell命令
   apidoc.url = `http://127.0.0.1:${config.dev.port}`; // 可换成自己的域名
   apidoc.sampleUrl = `http://127.0.0.1:${config.dev.port}`;
@@ -15,7 +16,7 @@ const generateApidoc = (cb) => {
 
   exec(
     "apidoc -i ./server/routes -i ./server/model -o ./server/public/apidoc",
-    (error, stdout, stderr) => {
+    (error) => {
       apidoc.url = `http://127.0.0.1:${config.dev.port}`;
       apidoc.sampleUrl = `http://127.0.0.1:${config.dev.port}`;
       fs.outputFileSync(
@@ -24,11 +25,7 @@ const generateApidoc = (cb) => {
       );
       if (error) {
         console.error(`执行的错误: ${error}`);
-        return cb();
       }
-      console.log(`stdout: ${stdout}`);
-      console.error(`stderr: ${stderr}`);
-      cb();
     }
   );
 };

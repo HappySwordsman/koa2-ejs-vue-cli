@@ -1,7 +1,7 @@
 module.exports = function (done) {
   const path = require("path");
   const nodemon = require("gulp-nodemon");
-  const env = require("./process.env")();
+  const env = require("./utils//process.env")();
   const resolve = (dirname) => path.join(__dirname, "..", dirname);
   nodemon({
     script: resolve("./server/bin/www"), // run ES5 code
@@ -9,17 +9,4 @@ module.exports = function (done) {
     env,
     done,
   });
-  /* exec(
-    `${script} ./node_modules/.bin/nodemon server/bin/www`,
-    (error, stdout, stderr) => {
-      if (error) {
-        console.error(`执行的错误: ${error}`);
-        return cb();
-      }
-      console.log(process.env.API_TEST);
-      console.log(`stdout - ${stdout}`);
-      console.error(`stderr - ${stderr}`);
-      cb();
-    }
-  ); */
 };

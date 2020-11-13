@@ -71,7 +71,7 @@ jwt采用的是[jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)不要�
 * 2020/11/06: 集成element-admin
 * 2020/11/10：集成文档生成、统一响应中间件、jwt验证（带有白名单）
 * 2020/11/11：[apidoc](https://apidocjs.com/)的文档生成、读取项目中的.evn* 文件，设置全局的环境变量
-* 2020/11/13：webpack打包结构修改
+* 2020/11/13：webpack打包结构修改、重写gulp的build任务
 
 ## 待完成
 
