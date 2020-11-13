@@ -43,8 +43,8 @@ module.exports = {
   build: {
     index: resolve("dist/index.html"),
     // 输出目录
-    assetsRoot: resolve("dist/server/public"),
-    assetsSubDirectory: "",
+    assetsRoot: resolve("dist/public"),
+    assetsSubDirectory: "static",
     assetsPublicPath: "/",
     // assetsSuFilebDirectory: "../../static",
     productionSourceMap: false,

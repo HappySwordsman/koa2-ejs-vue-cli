@@ -1,6 +1,6 @@
 {
   "name": "koa2-vue-cli-template",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "gulp:start": "gulp start",
@@ -27,11 +27,9 @@
     "koa-bodyparser": "^4.2.1",
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.0",
-    "koa-mount": "^4.0.0",
     "koa-onerror": "^4.1.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
-    "koa-views": "^6.2.0",
     "koa2-connect": "^1.0.2",
     "koa2-cors": "^2.0.6",
     "mongoose": "^5.10.13",

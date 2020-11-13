@@ -14,10 +14,10 @@ const resolve = (dir) => {
 module.exports = {
   name: "build server",
   target: "node",
-  entry: resolve(`${config.serverEntry}/bin/www.js`),
+  entry: resolve(`${config.serverEntry}/app.js`),
   output: {
     path: resolve("dist"),
-    filename: "server/www.js",
+    filename: "app.js",
     libraryTarget: "commonjs2",
   },
   optimization: {
@@ -39,7 +39,7 @@ module.exports = {
     process: true,
     Buffer: true,
     __filename: true,
-    __dirname: true,
+    __dirname: false, // true 会将打包前的的路径记住并改成相对路径
     setImmediate: true,
     path: true,
   },
@@ -121,16 +121,34 @@ module.exports = {
     new webpack.LoaderOptionsPlugin({
       minimize: true,
     }),
-    new webpack.BannerPlugin({
-      banner: "#!/usr/bin/env node",
-      raw: true,
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: resolve("server/public"),
+          to: "public",
+          globOptions: {
+            ignore: [".*"],
+          },
+        },
+      ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: resolve("server/bin"),
+          to: "bin",
+          globOptions: {
+            ignore: [".*"],
+          },
+        },
+      ],
     }),
 
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: resolve("server/public"),
-          to: "server/public",
+          from: resolve("server/pem"),
+          to: "pem",
           globOptions: {
             ignore: [".*"],
           },

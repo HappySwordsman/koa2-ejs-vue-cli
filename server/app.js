@@ -60,7 +60,7 @@ app.use(json());
 app.use(logger());
 
 // 静态地址解析
-app.use(koaStatic(__dirname + "/public"));
+app.use(koaStatic(`${__dirname}/public`));
 // 开发模式 && 非接口模式
 if (isDev && !isApiTest) {
   require("./utils/koa-dev-webpack")(app);

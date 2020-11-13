@@ -12,10 +12,7 @@ const webpackConfig = require("../build/webpack.build.conf");
 const build = (cb) => {
   const spinner = ora({
     text: chalk.blue("building for production..."),
-    spinner: {
-      interval: 80, // Optional
-      frames: [".....", "+", "-"],
-    },
+    spinner: "dots",
   });
 
   spinner.start();

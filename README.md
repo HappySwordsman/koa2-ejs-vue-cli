@@ -42,6 +42,9 @@
 ```
 * /server 目录是服务端开发接口和提供vue的页面容器
 * /client 就是vue-cli之前的src目录
+  
+## webpack资源目录的架构图
+![webpack.process](./static/images/webpack.process.png)
 
 ## 中间件原理
 对于koa的中间件的形容就是一根牙签穿透一整颗洋葱的过程，从外层进入，最后又从外层出去，牙签就是一个请求，洋葱的每一层就是中间件，请求会走过第一个中间件
@@ -68,6 +71,7 @@ jwt采用的是[jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)不要�
 * 2020/11/06: 集成element-admin
 * 2020/11/10：集成文档生成、统一响应中间件、jwt验证（带有白名单）
 * 2020/11/11：[apidoc](https://apidocjs.com/)的文档生成、读取项目中的.evn* 文件，设置全局的环境变量
+* 2020/11/13：webpack打包结构修改
 
 ## 待完成
 

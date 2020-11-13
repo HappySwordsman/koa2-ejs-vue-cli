@@ -3,7 +3,6 @@ module.exports = function (done) {
   const nodemon = require("gulp-nodemon");
   const env = require("./process.env")();
   const resolve = (dirname) => path.join(__dirname, "..", dirname);
-  console.log(env);
   nodemon({
     script: resolve("./server/bin/www"), // run ES5 code
     watch: resolve("./server"), // watch ES2015 code

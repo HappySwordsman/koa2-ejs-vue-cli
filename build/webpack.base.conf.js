@@ -42,12 +42,13 @@ function entryProcess(entryPath) {
   return entry;
 }
 
-// 多模板容器的处理
+// 多模板容器的处理 default views/
 function viewContainerProcess(viewsEntry) {
-  const prefixPath = resolve(`${config.serverEntry}/${viewsEntry}`);
-  const pathViews = glob.sync(`${prefixPath}**/*.ejs`);
+  const prefixPath = resolve(`${config.serverEntry}/${viewsEntry}`); // 打包前views的完整路径
+  const pathViews = glob.sync(`${prefixPath}**/*.ejs`); // 查询所有的ejs
   return pathViews.map((view) => {
     const ext = path.parse(view).ext;
+    // 替换成相对路径
     const remainPath = view.replace(prefixPath, "");
     const reName = remainPath.replace(ext, "").split(pathREG).join(".");
     const chunks = isDev ? [reName] : ["manifest", "vendors", reName];
@@ -79,10 +80,10 @@ module.exports = {
   // },
   // 输出js
   output: {
-    path: config.build.assetsRoot, // 默认 dist
-    publicPath: config[isDev ? "dev" : "build"].assetsPublicPath, // 默认 /
+    path: config.build.assetsRoot, // 默认 dist/public
+    publicPath: config[isDev ? "dev" : "build"].assetsPublicPath, // 默认 /piblic/ || /
     filename: path.posix.join(
-      config[isDev ? "dev" : "build"].assetsSubDirectory,
+      config[isDev ? "dev" : "build"].assetsSubDirectory, // static
       "js/[name].[hash:5].js"
     ),
     chunkFilename: path.posix.join(
@@ -181,25 +182,6 @@ module.exports = {
             explicitArray: false,
           },
         },
-      },
-      {
-        // ejs
-        test: /\.ejs$/,
-        use: [
-          {
-            loader: "html-loader",
-            options: {
-              minimize: true,
-            },
-          },
-          {
-            loader: "ejs-html-loader",
-            options: {
-              delimiter: "?",
-              production: !isDev,
-            },
-          },
-        ],
       },
       {
         test: /\.(le|c)ss$/,
