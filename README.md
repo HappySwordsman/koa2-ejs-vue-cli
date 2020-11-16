@@ -14,31 +14,33 @@
 ## 目录结构
 以实际项目为主，不一定及时更新哦
 ```text
-├── build // webpack处理
-├── config // webpack基础配置
-├── gulpfile.babel.js
-├── server // 服务层
+
+├── build // webpack
+├── client // 客户端
+│   ├── api // 客户端api集合
+│   ├── assets // 客户端文件集合
+│   ├── components // 客户端vue组件
+│   ├── entry // 客户端webpack入口文件
+│   ├── filters // vue 过滤器
+│   ├── icons // svg 文件
+│   ├── router // vue-router
+│   ├── store // vuex
+│   ├── utils // 客户端工具
+│   └── views // vue view
+├── config // 全局配置文件
+├── gulpfile.babel.js // gulp 任务
+├── server // 服务端
 │   ├── bin
-│   ├── middleware // server服务层的中间件
+│   ├── controller 
+│   ├── middleware
 │   ├── model
+│   ├── pem
 │   ├── public
-│   │   ├── images
-│   │   ├── javascripts
-│   │   └── stylesheets
 │   ├── routes
 │   ├── storage
 │   ├── utils
-│   └── views // vue的页面容器
-├── static // 静态资源文件目录
-│   └── images
-└── client // 原cli的src目录
-    ├── assets
-    │   └── images
-    ├── components
-    ├── entry // webpack的入口文件需要与 /server/views/中的文件同名, 否则容器无法引入对应的入口文件
-    ├── router
-    ├── store
-    └── views
+│   └── views // vue 容器
+└── static
 ```
 * /server 目录是服务端开发接口和提供vue的页面容器
 * /client 就是vue-cli之前的src目录
