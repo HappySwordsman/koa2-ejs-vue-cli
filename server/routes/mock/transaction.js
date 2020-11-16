@@ -1,8 +1,6 @@
 /* user 路由 */
 function transaction(router) {
-  router.prefix("/api/mock/transaction");
-
-  router.get("/list", function (ctx) {
+  router.get("/mock/transaction/list", function (ctx) {
     ctx.body = {
       code: 200,
       data: {
@@ -152,7 +150,6 @@ function transaction(router) {
       },
     };
   });
-  return router;
 }
 
 module.exports = transaction;

@@ -72,8 +72,10 @@ jwt采用的是[jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)不要�
 * 2020/11/10：集成文档生成、统一响应中间件、jwt验证（带有白名单）
 * 2020/11/11：[apidoc](https://apidocjs.com/)的文档生成、读取项目中的.evn* 文件，设置全局的环境变量
 * 2020/11/13：webpack打包结构修改、重写gulp的build任务
+* 2020/11/16：抽出controller层
 
 ## 待完成
+* 新增Server层
 
 ## 注意
 * 以防后期组件过多时编译过慢，采用接口模式和组件开发模式。接口模式不会编译任何组件，组件开始时不会重编译而是启用热更新

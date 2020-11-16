@@ -1,13 +1,19 @@
 const tokenVerifyMiddleware = require("../middleware/token-verify-middleware");
 const koaResponse = require("../middleware/koa-response-middleware");
 const Router = require("koa-router");
+const controller = require("../controller");
 
 const routes = {
-  users: require("./users"),
+  // views
   vueApp: require("./views/vue-app"),
   vueAdmin: require("./views/vue-admin"),
+
+  // mock
   mockUsers: require("./mock/users"),
   mockTransaction: require("./mock/transaction"),
+
+  // api
+  users: require("./users"),
 };
 
 // 小驼峰
@@ -16,7 +22,7 @@ const routes = {
 //     return $1.toUpperCase();
 //   });
 // }
-
+// webpack 无法动态获取require文件，导致路由依赖没有引入，故废弃这种引入方式
 // glob.sync(`${__dirname}/**/!(index).js`).forEach((file) => {
 //   const relativePath = file.replace(`${__dirname}/`, "");
 //   const relativePathParse = path.parse(relativePath);
@@ -47,8 +53,9 @@ function registerRouter(app) {
       ignore: ["/api/mock", "/vue-admin", "/vue-app"],
     })
   );
-  for (let routeFn of Object.values(routes)) {
+  for (let routeName of Object.keys(routes)) {
     const router = new Router();
+
     /* jwt 验证 一定要在路由返回前使用 */
     router.use(
       tokenVerifyMiddleware({
@@ -62,8 +69,13 @@ function registerRouter(app) {
         ],
       })
     );
-    const route = routeFn(router);
-    app.use(route.routes(), route.allowedMethods());
+
+    if (routeName.indexOf("vue") === -1) {
+      router.prefix("/api");
+    }
+
+    routes[routeName](router, controller);
+    app.use(router.routes(), router.allowedMethods());
   }
 }
 module.exports = registerRouter;
