@@ -10,7 +10,7 @@
  * @apiSuccess {String} personalPrefile 个人简介
  * @apiSuccess {Number} loginStatus 登录状态 0-未登录 1-登录
  * @apiSuccess {String} accountToken token
- *
+ * db.users.insert({"sequenceName" : "UserId", "sequenceValue" : -1})
  */
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;

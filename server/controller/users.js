@@ -1,8 +1,10 @@
 const Controller = require("./lib/Controller");
 const User = require("../model/User");
-const { getNextSequenceValue, updateOne } = require("../utils/model-tools");
 const JwtUtil = require("../utils/Jwt");
+const { updateOne } = require("../service/utils/model-tools");
 const { encryptCbc } = require("../utils/cryptoPackage");
+const ServeceUsers = require("../service/Users");
+const serviceUsers = new ServeceUsers();
 
 /**
  * @apiDefine ErrorResponse
@@ -64,7 +66,7 @@ class UserController extends Controller {
    */
   async info(ctx) {
     const token = ctx.headers.accounttoken;
-    const user = await getUserInfoByToken(token);
+    const user = await serviceUsers.getUserInfoByToken(token);
     if (user) {
       ctx.body = {
         type: "success",
@@ -79,16 +81,17 @@ class UserController extends Controller {
 }
 module.exports = UserController;
 
-// 用户授权
+// 用户授权 生成
 async function accountLogin({ username, password } = {}) {
-  username = username && username.trim();
-  password = password && password.trim();
+  username = username && String(username).trim();
+  password = password && String(password).trim();
   if (!username || !password) {
     return {
       type: "passwordError",
     };
   }
-  const userInfo = await getUserInfoByName(username);
+  const jwt = new JwtUtil();
+  const userInfo = await serviceUsers.getUserInfoByUsername(username);
 
   // 查询用户是否存在
   // console.log(userInfo);
@@ -96,10 +99,18 @@ async function accountLogin({ username, password } = {}) {
     // 用户存在 验证用过返回token
     const _password = encryptCbc(password);
     if (_password === userInfo.password) {
+      // 判断当前用户的token是否过期
+      if (jwt.verifyToken(userInfo.accountToken).status === 1) {
+        return {
+          type: "success",
+          data: {
+            accountToken: userInfo.accountToken,
+          },
+        };
+      }
       // 通过用户的 _id(该标识具有唯一性) 生成 token
       // console.log(userInfo._id);
-      const jwt = new JwtUtil(userInfo._id);
-      const token = jwt.generateToken();
+      const token = jwt.generateToken(userInfo._id);
       await updateOne(
         User,
         { _id: userInfo._id },
@@ -120,9 +131,11 @@ async function accountLogin({ username, password } = {}) {
     }
   } else {
     // 用户不存在直接创建用户 分配token
-    const userInfo = await createUser(username, password);
-    const jwt = new JwtUtil(userInfo._id);
-    const token = jwt.generateToken();
+    const userInfo = await serviceUsers.createUser(
+      username,
+      encryptCbc(password)
+    );
+    const token = jwt.generateToken(userInfo._id);
     await updateOne(
       User,
       { _id: userInfo._id },
@@ -135,51 +148,4 @@ async function accountLogin({ username, password } = {}) {
       },
     };
   }
-}
-
-// 创建用户
-async function createUser(username, password) {
-  const user = new User({
-    id: await getNextSequenceValue(User, "UserId"),
-    name: username,
-    password: encryptCbc(password),
-    createTime: new Date().getTime(),
-  });
-  return new Promise((resolve, reject) => {
-    user.save((err, product) => {
-      if (err) return reject(err);
-      resolve(product);
-    });
-  }).catch((err) => {
-    console.error(err);
-  });
-}
-
-// 通过名字获取用户信息
-function getUserInfoByName(username) {
-  return new Promise((resolve, reject) => {
-    User.findOne(
-      {
-        name: username,
-      },
-      { __v: 0 }
-    ).exec((err, result) => {
-      if (err) return reject(err);
-      return resolve(result);
-    });
-  });
-}
-// 通过token获取用户信息
-function getUserInfoByToken(token) {
-  return new Promise((resolve, reject) => {
-    User.findOne(
-      {
-        accountToken: token,
-      },
-      { password: 0, __v: 0, _id: 0, accountToken: 0 }
-    ).exec((err, result) => {
-      if (err) return reject(err);
-      return resolve(result);
-    });
-  });
 }

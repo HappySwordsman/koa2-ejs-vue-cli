@@ -22,14 +22,14 @@ module.exports = function ({ whiteList = [] } = {}) {
       // 需要验证的接口
       const token = ctx.headers.accounttoken;
       // console.log(ctx.headers.accounttoken);
-      const jwt = new JwtUtil(token);
-      const result = jwt.verifyToken();
+      const jwt = new JwtUtil();
+      const { status } = jwt.verifyToken(token);
       // 如果考验通过就next，否则就返回登陆信息不正确
-      if (result === null) {
+      if (status === 2) {
         ctx.body = {
           type: "noToken",
         };
-      } else if (result === "err") {
+      } else if (status === 0) {
         ctx.body = {
           type: "tokenFail",
         };
