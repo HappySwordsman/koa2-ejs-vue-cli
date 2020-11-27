@@ -8,9 +8,9 @@ const resolve = (dir) => path.join(__dirname, "../", dir);
 
 // 创建 token 类
 class Jwt {
-  constructor(data) {
+  constructor() {
     // 密文信息 / token
-    this.data = data;
+    // this.data = data;
   }
 
   /**
@@ -24,7 +24,7 @@ class Jwt {
     return jwt.sign(
       {
         data: key,
-        exp: created + 60 * 30,
+        exp: created + 60 * 60,
       },
       cert,
       { algorithm: "RS256" }
@@ -40,19 +40,25 @@ class Jwt {
       status: 1, // 0-失败 1-成功 2-不存在
       msg: "token success",
     };
+    const cert = fs.readFileSync(resolve("pem/rsa_public_key.pem")); // 公钥 可以自己生成
     try {
-      const cert = fs.readFileSync(resolve("pem/rsa_public_key.pem")); // 公钥 可以自己生成
       const result = jwt.verify(token, cert, { algorithms: ["RS256"] }) || {};
       const { exp = 0 } = result;
       const current = Math.floor(Date.now() / 1000);
-      if (current > exp) {
-        statusInfo.status = 0;
-        statusInfo.msg = "token exp";
+      if (current <= exp) {
+        statusInfo.status = 1;
+        statusInfo.msg = "token success";
       }
     } catch (e) {
-      // 没带 token
-      statusInfo.status = 0;
-      statusInfo.msg = "token absence";
+      if (e.message.indexOf("jwt expired") !== -1) {
+        // token 过期
+        statusInfo.status = 0;
+        statusInfo.msg = "token exp";
+      } else {
+        // 没带 token or err
+        statusInfo.status = 2;
+        statusInfo.msg = "token absence";
+      }
     }
     return statusInfo;
   }
