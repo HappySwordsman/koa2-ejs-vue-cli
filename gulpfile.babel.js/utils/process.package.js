@@ -1,6 +1,6 @@
 // const path = require('path');
-const fs = require("fs-extra");
-const processPackage = (cb) => {
+const processPackage = () => {
+  const fs = require("fs-extra");
   // ${JSON.stringify(require("../package").scripts)},
   const jsonStr = `{
   "scripts": {
@@ -8,7 +8,7 @@ const processPackage = (cb) => {
     "pm2:prd": "cross-env NODE_ENV=production pm2 start www"
   },
   "dependencies": ${JSON.stringify(
-    require("../package").dependencies,
+    require("../../package").dependencies,
     undefined,
     "\t"
   )}
@@ -18,7 +18,6 @@ const processPackage = (cb) => {
     if (err) {
       console.error(err);
     }
-    cb();
   });
 };
 module.exports = processPackage;

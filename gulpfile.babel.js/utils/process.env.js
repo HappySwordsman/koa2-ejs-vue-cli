@@ -2,12 +2,12 @@ module.exports = function () {
   const path = require("path");
   const glob = require("glob");
   const fs = require("fs-extra");
-  const pack = require("../package.json");
+  const pack = require("../../package.json");
   const cli = require("./cli")
     .program({ name: pack.name.replace(/@.+\//, ""), version: pack.version })
     .option(["-m", "--mode"], { metavar: "mode", help: "set process.env" })
     .parse(process.argv);
-  const resolve = (dirname) => path.join(__dirname, "..", dirname);
+  const resolve = (dirname) => path.join(__dirname, "../..", dirname);
 
   const envs = glob.sync(`${resolve("./")}/.env.*`).reduce((_envs, env) => {
     _envs[path.parse(env).ext.replace(/^\./, "")] = fs.readFileSync(env, {

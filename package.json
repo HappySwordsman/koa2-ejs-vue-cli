@@ -1,12 +1,12 @@
 {
   "name": "koa2-vue-cli-template",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "gulp:start": "gulp start",
     "gulp:start:api": "gulp start --mode devapi",
-    "gulp:build": "cross-env NODE_ENV=production gulp build",
-    "gulp:apidoc": "gulp apidoc",
+    "gulp:build": "gulp build --mode production",
+    "apidoc": "apidoc -i ./server/routes -i ./server/model -o ./server/public/apidoc",
     "prd": "cross-env NODE_ENV=production pm2 start server/bin/www",
     "eslintfix": "eslint --fix --ext .js --ext .vue client/",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -96,7 +96,6 @@
     "postcss-import": "^13.0.0",
     "postcss-loader": "^4.0.4",
     "prettier": "^2.1.2",
-    "rimraf": "^3.0.2",
     "sass": "1.26.2",
     "sass-loader": "8.0.2",
     "screenfull": "4.2.0",

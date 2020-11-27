@@ -1,12 +1,10 @@
 /* user 路由 */
 function users(router) {
-  router.prefix("/api/mock/users");
-
-  router.get("/", function (ctx) {
+  router.get("/mock/users/", function (ctx) {
     ctx.body = "this is a users response!";
   });
 
-  router.post("/login", function (ctx) {
+  router.post("/mock/users/login", function (ctx) {
     const tokens = {
       admin: {
         token: "admin-token",
@@ -23,7 +21,7 @@ function users(router) {
       },
     };
   });
-  router.get("/info", function (ctx) {
+  router.get("/mock/users/info", function (ctx) {
     const users = {
       "admin-token": {
         roles: ["admin"],
@@ -47,13 +45,12 @@ function users(router) {
       data: info,
     };
   });
-  router.post("/logout", function (ctx) {
+  router.post("/mock/users/logout", function (ctx) {
     ctx.body = {
       code: 200,
       data: "success",
     };
   });
-  return router;
 }
 
 module.exports = users;
