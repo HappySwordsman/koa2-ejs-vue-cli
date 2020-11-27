@@ -6,7 +6,7 @@
     "gulp:start": "gulp start",
     "gulp:start:api": "gulp start --mode devapi",
     "gulp:build": "gulp build --mode production",
-    "apidoc": "apidoc -i ./server/routes -i ./server/model -o ./server/public/apidoc",
+    "apidoc": "apidoc -i ./server/controller -i ./server/model -o ./server/public/apidoc",
     "prd": "cross-env NODE_ENV=production pm2 start server/bin/www",
     "eslintfix": "eslint --fix --ext .js --ext .vue client/",
     "test": "echo \"Error: no test specified\" && exit 1"
