@@ -1,13 +1,13 @@
 // 服务端的工具
 const $axios = require("axios");
+const path = require("path");
 const ejs = require("ejs");
 const config = require("../../config");
 const isDev = process.env.NODE_ENV === "development";
 
 // 设置ejs 处理
 ejs.delimiter = "?";
-
-function viewsMiddleware(path, options = {}) {
+function viewsMiddleware(_path, options = {}) {
   return async function views(ctx, next) {
     let extendsContext = false;
 
@@ -18,9 +18,14 @@ function viewsMiddleware(path, options = {}) {
       }
       return $axios
         .get(
-          `http://${config.dev.host}:${config.dev.port}${
-            config[isDev ? "dev" : "build"].assetsPublicPath
-          }${path}/${relPath}`
+          [
+            `http://${config.dev.host}:${config.dev.port}`,
+            path.join(
+              config[isDev ? "dev" : "build"].assetsPublicPath,
+              _path,
+              relPath
+            ),
+          ].join("")
         )
         .then((res) => {
           return res.data;

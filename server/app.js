@@ -14,14 +14,14 @@ const mongoDB = require("./model");
 const routes = require("./routes");
 
 // const koaMount = require("koa-mount");
-// const config = require("../config/index");
+const config = require("../config/index");
 const proxyOptions = require("../config/proxy.config");
 
 // 当前项目环境
 const isDev = process.env.NODE_ENV === "development";
 const isApiTest = process.env.API_TEST === "testing";
 
-console.log(`api: ${process.env.API_TEST}`);
+console.log(`apiMode: ${isApiTest}`);
 
 // start mongoDB
 try {
@@ -74,9 +74,10 @@ routes(app);
 // 404 处理
 app.use(async function (ctx, next) {
   /* 404 */
-  ctx.body = {
-    type: "nonexistenceApi",
-  };
+  await ctx.render("../../views/404.ejs", {
+    title: "404",
+    homePageUrl: `http://${config.dev.host}:${config.dev.port}`,
+  });
   await next();
 });
 

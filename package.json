@@ -1,10 +1,10 @@
 {
   "name": "koa2-vue-cli-template",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "scripts": {
     "gulp:start": "gulp start",
-    "gulp:start:api": "gulp start --mode devapi",
+    "gulp:apistart": "gulp start --mode devapi",
     "gulp:build": "gulp build --mode production",
     "apidoc": "apidoc -i ./server/controller -i ./server/model -o ./server/public/apidoc",
     "prd": "cross-env NODE_ENV=production pm2 start server/bin/www",

@@ -21,7 +21,7 @@ module.exports = function (options = { ignore: ["/api/mock"] }) {
         break;
       }
     }
-    if (!passed) {
+    if (!passed && typeof ctx.body !== "string") {
       try {
         const _body = ctx.body;
         ctx.body = new RespBody(_body.type, _body.data);

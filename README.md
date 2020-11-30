@@ -76,6 +76,7 @@ jwt采用的是[jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)不要�
 * 2020/11/13：webpack打包结构修改、重写gulp的build任务
 * 2020/11/16：抽出controller层
 * 2020/11/27：servece层
+* 2020/11/30：新增服务层404页面
 
 ## 待完成
 
