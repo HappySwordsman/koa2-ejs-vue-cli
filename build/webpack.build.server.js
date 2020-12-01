@@ -21,7 +21,6 @@ module.exports = {
     libraryTarget: "commonjs2",
   },
   optimization: {
-    minimize: true,
     minimizer: [
       new TerserPlugin({
         sourceMap: true, // Must be set to true if using source-maps in production
@@ -121,6 +120,7 @@ module.exports = {
     new webpack.LoaderOptionsPlugin({
       minimize: true,
     }),
+    // cp server/public
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -132,6 +132,7 @@ module.exports = {
         },
       ],
     }),
+    // cp server/bin
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -143,7 +144,7 @@ module.exports = {
         },
       ],
     }),
-
+    // cp server/pem
     new CopyWebpackPlugin({
       patterns: [
         {

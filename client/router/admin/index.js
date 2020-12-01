@@ -48,7 +48,7 @@ export const asyncRoutes = [];
 const createRouter = () =>
   new Router({
     mode: "history",
-    base: "/vue-admin/",
+    base: "/vue-admin",
     scrollBehavior: () => ({ y: 0 }),
     routes: constantRoutes,
   });
