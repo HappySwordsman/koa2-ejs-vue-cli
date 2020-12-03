@@ -12,6 +12,7 @@ module.exports = merge(webpackBaseConfig, {
   module: {},
 
   plugins: [
+    new webpack.ProgressPlugin(),
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": `"${process.env.NODE_ENV}"`,
     }),
@@ -32,7 +33,6 @@ module.exports = merge(webpackBaseConfig, {
         : undefined,
     }),
   ],
-
   devtool: config.dev.devtool,
 
   mode: process.env.NODE_ENV,
